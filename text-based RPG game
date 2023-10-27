@@ -1,0 +1,76 @@
+import random
+
+class Character:
+    def __init__(self, name, health, attack):
+        self.name = name
+        self.health = health
+        self.attack = attack
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+    def is_alive(self):
+        return self.health > 0
+
+    def get_attack(self):
+        return self.attack
+
+class Monster(Character):
+    def __init__(self, name, health, attack):
+        super().__init__(name, health, attack)
+
+class Player(Character):
+    def __init__(self, name, health, attack):
+        super().__init__(name, health, attack)
+
+def battle(player, enemy):
+    while player.is_alive() and enemy.is_alive():
+        player_damage = player.get_attack()
+        enemy_damage = enemy.get_attack()
+
+        print(f"{player.name} attacks {enemy.name} for {player_damage} damage.")
+        enemy.take_damage(player_damage)
+
+        if not enemy.is_alive():
+            print(f"{player.name} defeated {enemy.name}!")
+            break
+
+        print(f"{enemy.name} attacks {player.name} for {enemy_damage} damage.")
+        player.take_damage(enemy_damage)
+
+        if not player.is_alive():
+            print(f"{enemy.name} defeated {player.name}. Game over!")
+            break
+
+        print(f"{player.name}'s HP: {player.health} HP")
+        print(f"{enemy.name}'s HP: {enemy.health} HP")
+        print("-----------------------------------------")
+
+def main():
+    player = Player("Hero", 100, 20)
+    monster = Monster("Shadow", 80, 15)
+
+    print("Welcome to Shadow Legends!")
+    print(f"You encounter a fearsome {monster.name}!")
+
+    while player.is_alive() and monster.is_alive():
+        print("What will you do?")
+        print("1. Attack")
+        print("2. Quit")
+        choice = input()
+
+        if choice == '1':
+            battle(player, monster)
+        elif choice == '2':
+            print("You decided to quit the game. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+    if monster.is_alive():
+        print(f"Game Over! {monster.name} won.")
+    else:
+        print(f"Congratulations! {player.name} defeated {monster.name}!")
+
+if __name__ == "__main__":
+    main()
