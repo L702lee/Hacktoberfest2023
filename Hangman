@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_TRIES 6
+
+int main() {
+    char secretWord[100];
+    char guessedWord[100];
+    int tries = 0;
+    int wordLength, i, found, win = 0;
+
+    // Clear console screen
+    printf("\033[H\033[J");
+
+    printf("Welcome to Hangman!\n");
+    printf("Player 1, please enter the secret word: ");
+    scanf("%s", secretWord);
+
+    wordLength = strlen(secretWord);
+    for (i = 0; i < wordLength; i++) {
+        guessedWord[i] = '_';
+    }
+    guessedWord[wordLength] = '\0';
+
+    while (tries < MAX_TRIES && !win) {
+        found = 0;
+        printf("\nSecret Word: ");
+        for (i = 0; i < wordLength; i++) {
+            printf("%c ", guessedWord[i]);
+        }
+
+        printf("\n\nPlayer 2, guess a letter: ");
+        char guess;
+        scanf(" %c", &guess);
+
+        for (i = 0; i < wordLength; i++) {
+            if (secretWord[i] == guess) {
+                guessedWord[i] = guess;
+                found = 1;
+            }
+        }
+
+        if (!found) {
+            tries++;
+            printf("\nIncorrect guess. You have %d tries left.\n", MAX_TRIES - tries);
+        } else {
+            printf("\nGood guess!\n");
+        }
+
+        if (strcmp(secretWord, guessedWord) == 0) {
+            win = 1;
+        }
+    }
+
+    if (win) {
+        printf("\nCongratulations! You guessed the word: %s\n", secretWord);
+    } else {
+        printf("\nGame over! The secret word was: %s\n", secretWord);
+    }
+
+    return 0;
+}
